@@ -1,4 +1,4 @@
-import json
+# pip install -r requirements
 import sys
 from cryptography.fernet import Fernet
 from PyQt5.QtCore import *
@@ -12,8 +12,8 @@ class main_window(QWidget):
         self.title = 'enc-dec'
         self.left = 10
         self.top = 10
-        self.width = 400
-        self.height = 140
+        self.width = 600
+        self.height = 400
         self.init_ui()
 
 
@@ -31,7 +31,9 @@ class main_window(QWidget):
         # Create textbox for text
         self.lblText = QLabel('Text', self)
         self.text = QTextEdit(self)
-
+        #self.text.setFontFamily('Courier New')
+        #self.text.setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(255,255,255)")
+        
         # Create a button Gen Key
         self.btnGenKey = QPushButton('Gen key', self)
     
@@ -40,6 +42,9 @@ class main_window(QWidget):
 
         # Create a button Decrypt
         self.btnDecrypt = QPushButton('Decrypt', self)
+
+        # Create a button Clipboard
+        self.btnCopyToClipboard = QPushButton('Copy to clipboard', self)        
 
         # Fields on grid
         self.grid.addWidget(self.lblGenKey, 1, 1)
@@ -51,6 +56,7 @@ class main_window(QWidget):
         self.grid.addWidget(self.btnGenKey, 3, 1, 1, 2)
         self.grid.addWidget(self.btnEncrypt, 4, 1, 1, 2)
         self.grid.addWidget(self.btnDecrypt, 5, 1, 1, 2)
+        self.grid.addWidget(self.btnCopyToClipboard, 6, 1, 1, 2)
 
         self.setLayout(self.grid)
 
@@ -58,6 +64,7 @@ class main_window(QWidget):
         self.btnGenKey.clicked.connect(self.gen)
         self.btnEncrypt.clicked.connect(self.enc)
         self.btnDecrypt.clicked.connect(self.dec)
+        self.btnCopyToClipboard.clicked.connect(self.copyToClipboard)
 
         # Show window
         self.show()
@@ -90,6 +97,9 @@ class main_window(QWidget):
         except:
             QMessageBox.information(self, 'Error', 'Invalid key', QMessageBox.Ok)
 
+    
+    def copyToClipboard(self):
+        QApplication.clipboard().setText(self.text.toPlainText())
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Message',

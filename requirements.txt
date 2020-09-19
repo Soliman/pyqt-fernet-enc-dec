@@ -1,0 +1,4 @@
+cryptography==3.1
+fernet==1.0.1
+PyQt5==5.15.1
+PyQt5-sip==12.8.1
