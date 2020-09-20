@@ -83,8 +83,7 @@ class main_window(QWidget):
     def browseForKeyFile(self):
         """ Browse for key file """
         options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"Browse for key file", "","Key Files (*.key);;All Files (*)", options=options)
+        fileName = QFileDialog.getOpenFileName(self,"Browse for key file", "","Key Files (*.key);;All Files (*)")
         self.key_file.setText(fileName)
     
 
