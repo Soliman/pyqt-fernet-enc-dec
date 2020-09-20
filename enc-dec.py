@@ -42,35 +42,52 @@ class main_window(QWidget):
         self.btnEncrypt = QPushButton('Encrypt', self)
         self.btnDecrypt = QPushButton('Decrypt', self)
         self.btnCopyToClipboard = QPushButton('Copy to clipboard', self)       
+        self.btnBrowseForKeyFile = QPushButton('Browse', self)
 
         # Connect buttons to functions
         self.btnGenKey.clicked.connect(self.gen)
         self.btnEncrypt.clicked.connect(self.enc)
         self.btnDecrypt.clicked.connect(self.dec)
         self.btnCopyToClipboard.clicked.connect(self.copyToClipboard) 
+        self.btnBrowseForKeyFile.clicked.connect(self.browseForKeyFile) 
+
+        """ Start of grid """
 
         # Create a grid layout
-        self.grid = QGridLayout()        
+        self.grid = QGridLayout()
+
+        # .addWidget(widget, row, column [,rowSpan], [columnSpan])    
 
         # Put fields on grid
         self.grid.addWidget(self.lblGenKey, 1, 1)
         self.grid.addWidget(self.key_file, 1, 2)
         self.grid.addWidget(self.lblText, 2, 1)
-        self.grid.addWidget(self.text, 2, 2)
+        self.grid.addWidget(self.text, 2, 2, 1, 2)
         
-        # Put buttons on grid
-        self.grid.addWidget(self.btnGenKey, 3, 1, 1, 2)
-        self.grid.addWidget(self.btnEncrypt, 4, 1, 1, 2)
-        self.grid.addWidget(self.btnDecrypt, 5, 1, 1, 2)
-        self.grid.addWidget(self.btnCopyToClipboard, 6, 1, 1, 2)
+        # Put buttons on grid        
+        self.grid.addWidget(self.btnGenKey, 3, 1, 1, 3)
+        self.grid.addWidget(self.btnEncrypt, 4, 1, 1, 3)
+        self.grid.addWidget(self.btnDecrypt, 5, 1, 1, 3)
+        self.grid.addWidget(self.btnCopyToClipboard, 6, 1, 1, 3)
+        self.grid.addWidget(self.btnBrowseForKeyFile, 1, 3, 1, 1)
 
         # Set the grid as layout
         self.setLayout(self.grid)
+
+        """ End of grid """
 
         # Show window
         self.show()
 
     
+    def browseForKeyFile(self):
+        """ Browse for key file """
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(self,"Browse for key file", "","Key Files (*.key);;All Files (*)", options=options)
+        self.key_file.setText(fileName)
+    
+
     def gen(self):
         """ Generate a key file """
         try:
