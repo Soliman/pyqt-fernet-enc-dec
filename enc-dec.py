@@ -44,7 +44,8 @@ class main_window(QWidget):
         self.btnDecrypt = QPushButton('Decrypt', self)
         self.btnCopyToClipboard = QPushButton('Copy to clipboard', self)       
         self.btnBrowseForKeyFile = QPushButton('Browse', self)
-        # TODO: save\browse for output file
+        self.btnBrowseForOpenFile = QPushButton('Open', self)
+        self.btnBrowseForSaveFile = QPushButton('Save', self)
 
         # Connect buttons to functions
         self.btnGenKey.clicked.connect(self.gen)
@@ -52,7 +53,8 @@ class main_window(QWidget):
         self.btnDecrypt.clicked.connect(self.dec)
         self.btnCopyToClipboard.clicked.connect(self.copyToClipboard) 
         self.btnBrowseForKeyFile.clicked.connect(self.browseForKeyFile) 
-        # TODO: connect save\browse for output file button to function
+        self.btnBrowseForOpenFile.clicked.connect(self.browseForOpenFile) 
+        self.btnBrowseForSaveFile.clicked.connect(self.browseForSaveFile) 
 
         """ Start of grid """
 
@@ -73,7 +75,8 @@ class main_window(QWidget):
         self.grid.addWidget(self.btnDecrypt, 5, 1, 1, 3)
         self.grid.addWidget(self.btnCopyToClipboard, 6, 1, 1, 3)
         self.grid.addWidget(self.btnBrowseForKeyFile, 1, 3, 1, 1)
-        # TODO: add save\browse button for output file
+        self.grid.addWidget(self.btnBrowseForOpenFile, 7, 1, 1, 3)
+        self.grid.addWidget(self.btnBrowseForSaveFile, 8, 1, 1, 3)
 
         # Set the grid as layout
         self.setLayout(self.grid)
@@ -88,9 +91,26 @@ class main_window(QWidget):
         """ Browse for key file """
         fileName = QFileDialog.getOpenFileName(self,"Browse for key file", "","Key Files (*.key);;All Files (*)")
         self.key_file.setText(fileName[0])
-    
 
-    # TODO: add save\browse for output file function
+
+    def browseForOpenFile(self):
+        """ Browse for open file """
+        fileName = QFileDialog.getOpenFileName(self,"Open file", "","Enc Files (*.enc);;All Files (*)")
+        try:
+            with open(fileName[0]) as inFile:
+                self.text.setText(inFile.readlines()[0])
+        except IOError as e:
+            QMessageBox.information(self, 'Error', str(e), QMessageBox.Ok)    
+
+
+    def browseForSaveFile(self):
+        """ Browse for save file """
+        fileName = QFileDialog.getSaveFileName(self,"Save text to...",".","Enc file (*.enc)")
+        try:
+            with open(fileName[0], "w") as outFile:
+                outFile.write(self.text.toPlainText())
+        except IOError as e:
+            QMessageBox.information(self, 'Error', str(e), QMessageBox.Ok)
 
 
     def gen(self):
@@ -129,10 +149,11 @@ class main_window(QWidget):
         try:
             f = Fernet(key)
             decrypted = f.decrypt(text)
-            self.text.setText(decrypted.decode('utf-8'))
+            self.text.setText(decrypted.decode('utf-8'))                 
         except:
             QMessageBox.information(self, 'Error', 'Unable to decode message, check key file.', 
                                     QMessageBox.Ok)
+
 
     
     def copyToClipboard(self):
