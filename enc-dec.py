@@ -18,10 +18,11 @@ class main_window(QWidget):
 
 
     def init_ui(self):
+        """ Initialize UI """
+
+        # Set window attributes
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-
-        self.grid = QGridLayout()        
     
         # Create textbox for key file
         self.lblGenKey = QLabel('Key file', self)
@@ -31,46 +32,46 @@ class main_window(QWidget):
         # Create textbox for text
         self.lblText = QLabel('Text', self)
         self.text = QTextEdit(self)
-        #self.text.setFontFamily('Courier New')
-        #self.text.setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(255,255,255)")
+
+        # Optional styling on textbox
+        # self.text.setFontFamily('Courier New')
+        # self.text.setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(255,255,255)")
         
-        # Create a button Gen Key
+        # Create buttons
         self.btnGenKey = QPushButton('Gen key', self)
-    
-        # Create a button Encrypt
         self.btnEncrypt = QPushButton('Encrypt', self)
-
-        # Create a button Decrypt
         self.btnDecrypt = QPushButton('Decrypt', self)
-
-        # Create a button Clipboard
-        self.btnCopyToClipboard = QPushButton('Copy to clipboard', self)        
-
-        # Fields on grid
-        self.grid.addWidget(self.lblGenKey, 1, 1)
-        self.grid.addWidget(self.key_file, 1, 2)
-        self.grid.addWidget(self.lblText, 2, 1)
-        self.grid.addWidget(self.text, 2, 2)
-        
-        # Buttons on grid
-        self.grid.addWidget(self.btnGenKey, 3, 1, 1, 2)
-        self.grid.addWidget(self.btnEncrypt, 4, 1, 1, 2)
-        self.grid.addWidget(self.btnDecrypt, 5, 1, 1, 2)
-        self.grid.addWidget(self.btnCopyToClipboard, 6, 1, 1, 2)
-
-        self.setLayout(self.grid)
+        self.btnCopyToClipboard = QPushButton('Copy to clipboard', self)       
 
         # Connect buttons to functions
         self.btnGenKey.clicked.connect(self.gen)
         self.btnEncrypt.clicked.connect(self.enc)
         self.btnDecrypt.clicked.connect(self.dec)
-        self.btnCopyToClipboard.clicked.connect(self.copyToClipboard)
+        self.btnCopyToClipboard.clicked.connect(self.copyToClipboard) 
+
+        # Create a grid layout
+        self.grid = QGridLayout()        
+
+        # Put fields on grid
+        self.grid.addWidget(self.lblGenKey, 1, 1)
+        self.grid.addWidget(self.key_file, 1, 2)
+        self.grid.addWidget(self.lblText, 2, 1)
+        self.grid.addWidget(self.text, 2, 2)
+        
+        # Put buttons on grid
+        self.grid.addWidget(self.btnGenKey, 3, 1, 1, 2)
+        self.grid.addWidget(self.btnEncrypt, 4, 1, 1, 2)
+        self.grid.addWidget(self.btnDecrypt, 5, 1, 1, 2)
+        self.grid.addWidget(self.btnCopyToClipboard, 6, 1, 1, 2)
+
+        # Set the grid as layout
+        self.setLayout(self.grid)
 
         # Show window
         self.show()
 
     
-    def gen(self):        
+    def gen(self) -> None:        
         try:
             with open(self.key_file.text(), "xb") as outFile:
                 key = Fernet.generate_key()
@@ -79,7 +80,7 @@ class main_window(QWidget):
             QMessageBox.information(self, 'Error', str(e), QMessageBox.Ok)
 
 
-    def enc(self):
+    def enc(self) -> None:
         text = self.text.toPlainText().encode('utf-8')
         key = open(self.key_file.text(), "rb").read()
         f = Fernet(key)
@@ -87,7 +88,7 @@ class main_window(QWidget):
         self.text.setText(encrypted.decode('utf-8'))
 
 
-    def dec(self):
+    def dec(self) -> None:
         text = self.text.toPlainText().encode('utf-8')
         key = open(self.key_file.text(), "rb").read()
         f = Fernet(key)
@@ -98,10 +99,11 @@ class main_window(QWidget):
             QMessageBox.information(self, 'Error', 'Invalid key', QMessageBox.Ok)
 
     
-    def copyToClipboard(self):
+    def copyToClipboard(self) -> None:
         QApplication.clipboard().setText(self.text.toPlainText())
 
-    def closeEvent(self, event):
+
+    def closeEvent(self, event) -> None:
         reply = QMessageBox.question(self, 'Message',
                                      "Are you sure to quit?", QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.Yes)
