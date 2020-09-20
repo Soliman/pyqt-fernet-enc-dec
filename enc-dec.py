@@ -84,22 +84,33 @@ class main_window(QWidget):
     def enc(self):
         """ Encode text """
         text = self.text.toPlainText().encode('utf-8')
-        key = open(self.key_file.text(), "rb").read()
-        f = Fernet(key)
-        encrypted = f.encrypt(text)
-        self.text.setText(encrypted.decode('utf-8'))
+        try:
+            key = open(self.key_file.text(), "rb").read()
+        except IOError as e:
+            QMessageBox.information(self, 'Error', str(e), QMessageBox.Ok)
+        try:
+            f = Fernet(key)
+            encrypted = f.encrypt(text)
+            self.text.setText(encrypted.decode('utf-8'))
+        except:
+            QMessageBox.information(self, 'Error', 'Unable to encode message, check key file.', 
+                                    QMessageBox.Ok)
 
 
     def dec(self):
         """ Decode text """
         text = self.text.toPlainText().encode('utf-8')
-        key = open(self.key_file.text(), "rb").read()
-        f = Fernet(key)
         try:
+            key = open(self.key_file.text(), "rb").read()
+        except IOError as e:
+            QMessageBox.information(self, 'Error', str(e), QMessageBox.Ok)        
+        try:
+            f = Fernet(key)
             decrypted = f.decrypt(text)
             self.text.setText(decrypted.decode('utf-8'))
         except:
-            QMessageBox.information(self, 'Error', 'Invalid key', QMessageBox.Ok)
+            QMessageBox.information(self, 'Error', 'Unable to decode message, check key file.', 
+                                    QMessageBox.Ok)
 
     
     def copyToClipboard(self):
@@ -109,7 +120,7 @@ class main_window(QWidget):
 
     def closeEvent(self, event):
         """ Close application """
-        reply = QMessageBox.question(self, 'Message',
+        reply = QMessageBox.question(self, 'Question',
                                      "Are you sure to quit?", QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.Yes)
 
