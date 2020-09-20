@@ -44,6 +44,7 @@ class main_window(QWidget):
         self.btnDecrypt = QPushButton('Decrypt', self)
         self.btnCopyToClipboard = QPushButton('Copy to clipboard', self)       
         self.btnBrowseForKeyFile = QPushButton('Browse', self)
+        # TODO: save\browse for output file
 
         # Connect buttons to functions
         self.btnGenKey.clicked.connect(self.gen)
@@ -51,6 +52,7 @@ class main_window(QWidget):
         self.btnDecrypt.clicked.connect(self.dec)
         self.btnCopyToClipboard.clicked.connect(self.copyToClipboard) 
         self.btnBrowseForKeyFile.clicked.connect(self.browseForKeyFile) 
+        # TODO: connect save\browse for output file button to function
 
         """ Start of grid """
 
@@ -71,6 +73,7 @@ class main_window(QWidget):
         self.grid.addWidget(self.btnDecrypt, 5, 1, 1, 3)
         self.grid.addWidget(self.btnCopyToClipboard, 6, 1, 1, 3)
         self.grid.addWidget(self.btnBrowseForKeyFile, 1, 3, 1, 1)
+        # TODO: add save\browse button for output file
 
         # Set the grid as layout
         self.setLayout(self.grid)
@@ -86,6 +89,9 @@ class main_window(QWidget):
         fileName = QFileDialog.getOpenFileName(self,"Browse for key file", "","Key Files (*.key);;All Files (*)")
         self.key_file.setText(fileName[0])
     
+
+    # TODO: add save\browse for output file function
+
 
     def gen(self):
         """ Generate a key file """
