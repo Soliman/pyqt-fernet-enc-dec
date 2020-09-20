@@ -4,6 +4,7 @@ from cryptography.fernet import Fernet
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+import pyperclip
 
 class main_window(QWidget):
 
@@ -12,7 +13,7 @@ class main_window(QWidget):
         self.title = 'enc-dec'
         self.left = 10
         self.top = 10
-        self.width = 600
+        self.width = 600    
         self.height = 400
         self.init_ui()
 
@@ -130,7 +131,7 @@ class main_window(QWidget):
     
     def copyToClipboard(self):
         """ Copy text to clipboard """
-        QApplication.clipboard().setText(self.text.toPlainText())
+        pyperclip.copy(self.text.toPlainText())
 
 
     def closeEvent(self, event):
