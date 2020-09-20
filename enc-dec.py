@@ -71,7 +71,8 @@ class main_window(QWidget):
         self.show()
 
     
-    def gen(self) -> None:        
+    def gen(self):
+        """ Generate a key file """
         try:
             with open(self.key_file.text(), "xb") as outFile:
                 key = Fernet.generate_key()
@@ -80,7 +81,8 @@ class main_window(QWidget):
             QMessageBox.information(self, 'Error', str(e), QMessageBox.Ok)
 
 
-    def enc(self) -> None:
+    def enc(self):
+        """ Encode text """
         text = self.text.toPlainText().encode('utf-8')
         key = open(self.key_file.text(), "rb").read()
         f = Fernet(key)
@@ -88,7 +90,8 @@ class main_window(QWidget):
         self.text.setText(encrypted.decode('utf-8'))
 
 
-    def dec(self) -> None:
+    def dec(self):
+        """ Decode text """
         text = self.text.toPlainText().encode('utf-8')
         key = open(self.key_file.text(), "rb").read()
         f = Fernet(key)
@@ -99,11 +102,13 @@ class main_window(QWidget):
             QMessageBox.information(self, 'Error', 'Invalid key', QMessageBox.Ok)
 
     
-    def copyToClipboard(self) -> None:
+    def copyToClipboard(self):
+        """ Copy text to clipboard """
         QApplication.clipboard().setText(self.text.toPlainText())
 
 
-    def closeEvent(self, event) -> None:
+    def closeEvent(self, event):
+        """ Close application """
         reply = QMessageBox.question(self, 'Message',
                                      "Are you sure to quit?", QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.Yes)
