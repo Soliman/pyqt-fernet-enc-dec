@@ -99,6 +99,7 @@ class main_window(QWidget):
         try:
             with open(fileName[0]) as inFile:
                 self.text.setText(inFile.readlines()[0])
+                self.text.repaint()
         except IOError as e:
             QMessageBox.information(self, 'Error', str(e), QMessageBox.Ok)    
 
@@ -134,6 +135,7 @@ class main_window(QWidget):
             f = Fernet(key)
             encrypted = f.encrypt(text)
             self.text.setText(encrypted.decode('utf-8'))
+            self.text.repaint()
         except:
             QMessageBox.information(self, 'Error', 'Unable to encode message, check key file.', 
                                     QMessageBox.Ok)
@@ -149,7 +151,8 @@ class main_window(QWidget):
         try:
             f = Fernet(key)
             decrypted = f.decrypt(text)
-            self.text.setText(decrypted.decode('utf-8'))                 
+            self.text.setText(decrypted.decode('utf-8'))  
+            self.text.repaint()               
         except:
             QMessageBox.information(self, 'Error', 'Unable to decode message, check key file.', 
                                     QMessageBox.Ok)
